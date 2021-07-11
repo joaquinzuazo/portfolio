@@ -1,25 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  useLocation,
+  withRouter
+} from "react-router-dom";
 
-function App() {
+import Index from './components/Index'
+import MenuNav from './components/menuNav/MenuNav'
+import AboutIndex from './components/AboutIndex'
+import ProjectsIndex from './components/ProjectsIndex'
+import NotFound from './components/notFound/NotFound';
+import 'antd/dist/antd.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css'
+
+function _ScrollToTop(props) {
+  const { pathname } = useLocation();
+  useEffect(() => {
+      window.scrollTo(0, 0);
+  }, [pathname]);
+  return props.children
+}
+const ScrollToTop = withRouter(_ScrollToTop)
+
+function App(){ 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <MenuNav />
+      <div className="App"> 
+      <ScrollToTop>
+        <Switch>
+          <Route exact path="/about">
+            <AboutIndex />
+          </Route>
+          <Route exact path="/projects/:project">
+            <ProjectsIndex />
+          </Route>
+          <Route exact path="/">
+            <Index />
+          </Route>
+          <Route exact path="*" >
+            <NotFound />
+          </Route>
+        </Switch>
+      </ScrollToTop>
+      </div>
+    </BrowserRouter>
   );
 }
+
 
 export default App;
